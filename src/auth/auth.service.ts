@@ -28,11 +28,7 @@ export class AuthService {
         });
 
         if (error) {
-            if (error.message.includes('Invalid login credentials')) {
-                throw new Error('Credenciales inválidas');
-            } else {
-                throw new Error(`Error de autenticación: ${error.message}`);
-            }
+        throw new InvalidCredentialsException(error.message);
         }
 
         return data;
@@ -53,4 +49,11 @@ export class AuthService {
         }
         return { message: 'Logged out successfully' };
     }
+}
+
+export class InvalidCredentialsException extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'InvalidCredentialsException';
+  }
 }

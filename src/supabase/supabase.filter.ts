@@ -1,3 +1,4 @@
+// src/common/filters/supabase.filter.ts
 import {
   ExceptionFilter,
   Catch,
@@ -5,23 +6,22 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { InvalidCredentialsException } from '../auth/auth.service';
 
-@Catch(Error)
+@Catch(InvalidCredentialsException)
 export class SupabaseFilter implements ExceptionFilter {
-  catch(exception: Error, host: ArgumentsHost) {
+  catch(exception: InvalidCredentialsException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    let status = HttpStatus.INTERNAL_SERVER_ERROR;
-    let message = 'Internal server error';
+    let status = HttpStatus.UNAUTHORIZED; // 401 por defecto para credenciales inválidas
+    let message = 'Credenciales inválidas';
 
-    if (exception.message.includes('Invalid login credentials')) {
-      status = HttpStatus.UNAUTHORIZED;
-      message = 'Credenciales inválidas';
-    } else if (exception.message.includes('User already registered')) {
-      status = HttpStatus.CONFLICT;
-      message = 'El usuario ya está registrado';
+    // Puedes añadir más lógica aquí si necesitas diferenciar otros errores
+    if (exception.message.includes('Email not confirmed')) {
+      status = HttpStatus.FORBIDDEN;
+      message = 'Por favor confirma tu email primero';
     }
 
     response.status(status).json({
