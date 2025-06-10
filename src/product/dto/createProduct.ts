@@ -13,7 +13,7 @@ export class CreateProductDto {
     price: number;
         
     @IsString()
-    category?: string;
+    category: string;
     
     @IsNumber()
     stock: number;
