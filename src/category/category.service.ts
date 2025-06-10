@@ -11,6 +11,7 @@ export class CategoryService {
 
     async getCategories() {
         const {data, error} = await this.supabase
+            .schema('public')
             .from ('category')
             .select('*')
         if(error) throw new Error(error.message);
