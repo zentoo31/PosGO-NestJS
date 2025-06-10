@@ -17,6 +17,17 @@ export class CategoryService {
         if(error) throw new Error(error.message);
         return data;
     }
+
+    async createCategory(category: CreateCategoryDto){
+        const {data, error} = await this.supabase
+            .schema('public')
+            .from('category')
+            .insert(category)
+            .select('*')
+            .single();
+        if(error) throw new Error(error.message);
+        return data;
+    }
 }
 
 
