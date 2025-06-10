@@ -8,4 +8,8 @@ export class CreateCategoryDto {
     @MaxLength(200)
     @IsString()
     description: string;
+    
+    @MaxLength(20)
+    @IsString()
+    color: string;
 }
