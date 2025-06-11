@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Post, UsePipes, ValidationPipe, Body, Patch, Param, Delete,  HttpException, HttpStatus } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/createProduct';
 
@@ -6,19 +6,28 @@ import { CreateProductDto } from './dto/createProduct';
 export class ProductController {
     constructor(private readonly productService: ProductService) {}
 
-    async createProduct(product: CreateProductDto) {
+    @Get()
+    async getProducts() {
         try {
-            return this.productService.createProduct(product);
+            return await this.productService.getProducts();
         } catch (error) {
-            throw new Error(`Error creating product: ${error.message}`);
+           throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: `${error.message}`,
+            }, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    async getProducts() {
+    @Post()
+    @UsePipes(new ValidationPipe())
+    async createProduct(@Body() product: CreateProductDto) {
         try {
-            return this.productService.getProducts();
+            return await this.productService.createProduct(product);
         } catch (error) {
-            throw new Error(`Error fetching products: ${error.message}`);
+            throw new HttpException({
+                status: HttpStatus.NOT_FOUND,
+                error: `${error.message}`,
+            }, HttpStatus.NOT_FOUND);
         }
     }
 }
