@@ -13,11 +13,11 @@ export class CreateProductDto {
     price: number;
         
     @IsString()
-    category: string;
+    category: number;
     
     @IsNumber()
     stock: number;
         
     @IsString()
-    imageUrl: string;
+    imageUrl?: string;
 }
