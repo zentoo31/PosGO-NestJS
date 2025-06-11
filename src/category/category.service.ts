@@ -28,6 +28,42 @@ export class CategoryService {
         if(error) throw new Error(error.message);
         return {id: data.id ,message: 'Category created successfully'};
     }
+
+    async getCategoryById(id: string) {
+        const { data, error } = await this.supabase
+            .schema('public')
+            .from('category')
+            .select('*')
+            .eq('id', id)
+            .single();
+        if (error) throw new Error(error.message);
+        return data;
+    }
+
+    async updateCategory(id: string, category: CreateCategoryDto) {
+        const { data, error } = await this.supabase
+            .schema('public')
+            .from('category')
+            .update(category)
+            .eq('id', id)
+            .select('*')
+            .single();
+        
+        if (error) throw new Error(error.message);
+        return { id: data.id, message: 'Category updated successfully' };
+    } 
+
+    async deleteCategory(id: string) {
+        const { error } = await this.supabase
+            .schema('public')
+            .from('category')
+            .delete()
+            .eq('id', id);
+        
+        if (error) throw new Error(error.message);
+        return { message: 'Category deleted successfully' };
+    }
+    
 }
 
 
