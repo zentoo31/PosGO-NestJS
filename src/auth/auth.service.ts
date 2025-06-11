@@ -18,6 +18,16 @@ export class AuthService {
         if (error) {
             throw new Error(error.message);
         }
+
+        await this.supabase
+            .schema('public')
+            .from('profile')
+            .insert({
+                user_id: data.user?.id,
+            })
+            .select('*')
+            .single();
+
         return data;
     }
 
