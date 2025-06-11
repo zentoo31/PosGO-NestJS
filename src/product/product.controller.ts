@@ -1,4 +1,4 @@
-import { Controller, Get, Post, UsePipes, ValidationPipe, Body, Patch, Param, Delete,  HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, UsePipes, ValidationPipe, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/createProduct';
 
@@ -30,4 +30,42 @@ export class ProductController {
             }, HttpStatus.NOT_FOUND);
         }
     }
+
+    @Get(':id')
+    async getProductById(@Param('id') id: string) {
+        try {
+            return await this.productService.getProductById(id);
+        } catch (error) {
+            throw new HttpException({
+                status: HttpStatus.NOT_FOUND,
+                error: `${error.message}`,
+            }, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Patch(':id')
+    @UsePipes(new ValidationPipe())
+    async updateProduct(@Param('id') id: string, @Body() product: CreateProductDto) {
+        try {
+            return await this.productService.updateProduct(id, product);
+        } catch (error) {
+            throw new HttpException({
+                status: HttpStatus.NOT_FOUND,
+                error: `${error.message}`,
+            }, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Delete(':id')
+    async deleteProduct(@Param('id') id: string) {
+        try {
+            return await this.productService.deleteProduct(id);
+        } catch (error) {
+            throw new HttpException({
+                status: HttpStatus.NOT_FOUND,
+                error: `${error.message}`,
+            }, HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
