@@ -1,4 +1,4 @@
-import { Controller, Get, Post, UsePipes, ValidationPipe, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, UsePipes, ValidationPipe, Body, Patch, Param, Delete, HttpException, HttpStatus  } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/createCategory';
 
@@ -12,7 +12,10 @@ export class CategoryController {
             return await this.categoryService.getCategories();
         }
         catch (error) {
-            throw new Error(`${error.message}`);
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: `${error.message}`,
+            }, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -22,7 +25,10 @@ export class CategoryController {
         try {
             return await this.categoryService.createCategory(category);
         } catch (error) {
-            throw new Error(`${error.message}`);
+            throw new HttpException({
+                status: HttpStatus.BAD_REQUEST,
+                error: `${error.message}`,
+            }, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -31,7 +37,10 @@ export class CategoryController {
         try {
             return await this.categoryService.getCategoryById(id);
         } catch (error) {
-            throw new Error(`${error.message}`);
+            throw new HttpException({
+                status: HttpStatus.NOT_FOUND,
+                error: `${error.message}`,
+            }, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -41,7 +50,10 @@ export class CategoryController {
         try {
             return await this.categoryService.updateCategory(id, category);
         } catch (error) {
-            throw new Error(`${error.message}`);
+            throw new HttpException({
+                status: HttpStatus.NOT_FOUND,
+                error: `${error.message}`,
+            }, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -50,7 +62,10 @@ export class CategoryController {
         try {
             return await this.categoryService.deleteCategory(id);
         } catch (error) {
-            throw new Error(`${error.message}`);
+            throw new HttpException({
+                status: HttpStatus.NOT_FOUND,
+                error: `${error.message}`,
+            }, HttpStatus.NOT_FOUND);
         }
     }
 }
