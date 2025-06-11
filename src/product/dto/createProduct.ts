@@ -1,4 +1,4 @@
-import { IsString, IsNumber, MaxLength } from "class-validator";
+import { IsString, IsNumber, MaxLength, IsOptional } from "class-validator";
 
 export class CreateProductDto {
     @MaxLength(100)
@@ -12,12 +12,13 @@ export class CreateProductDto {
     @IsNumber()
     price: number;
         
-    @IsString()
+    @IsNumber()
     category: number;
     
     @IsNumber()
     stock: number;
         
     @IsString()
+    @IsOptional()
     imageUrl?: string;
 }
