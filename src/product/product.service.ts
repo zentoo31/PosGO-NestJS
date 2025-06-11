@@ -39,4 +39,39 @@ export class ProductService {
         return data;
     }
 
+    async getProductById(id: string) {
+        const { data, error } = await this.supabase
+            .schema('public')
+            .from('product')
+            .select('*')
+            .eq('id', id)
+            .single();
+        if (error) throw new Error(error.message);
+        return data;
+    }
+
+    async updateProduct(id: string, product: CreateProductDto) {
+        const { data, error } = await this.supabase
+            .schema('public')
+            .from('product')
+            .update(product)
+            .eq('id', id)
+            .select('*')
+            .single();
+        
+        if (error) throw new Error(error.message);
+        return { id: data.id, message: 'Product updated successfully' };
+    }
+
+    async deleteProduct(id: string) {
+        const { error } = await this.supabase
+            .schema('public')
+            .from('product')
+            .delete()
+            .eq('id', id);
+        
+        if (error) throw new Error(error.message);
+        return { message: 'Product deleted successfully' };
+    }
+
 }
