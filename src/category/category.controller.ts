@@ -1,4 +1,4 @@
-import { Controller, Get, Post, UsePipes, ValidationPipe, Body } from '@nestjs/common';
+import { Controller, Get, Post, UsePipes, ValidationPipe, Body, Patch, Param, Delete } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/createCategory';
 
@@ -25,5 +25,32 @@ export class CategoryController {
             throw new Error(`${error.message}`);
         }
     }
-    
+
+    @Get(':id')
+    async getCategoryById(@Param('id') id: string) {
+        try {
+            return await this.categoryService.getCategoryById(id);
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
+
+    @Patch(':id')
+    @UsePipes(new ValidationPipe())
+    async updateCategory(@Body() category: CreateCategoryDto, @Param('id') id: string) {
+        try {
+            return await this.categoryService.updateCategory(id, category);
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
+
+    @Delete(':id')
+    async deleteCategory(@Param('id') id: string) {
+        try {
+            return await this.categoryService.deleteCategory(id);
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
 }
