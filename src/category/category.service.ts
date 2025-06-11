@@ -26,7 +26,7 @@ export class CategoryService {
             .select('*')
             .single();
         if(error) throw new Error(error.message);
-        return data;
+        return {id: data.id ,message: 'Category created successfully'};
     }
 }
 
