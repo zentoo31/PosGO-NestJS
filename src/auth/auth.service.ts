@@ -26,8 +26,6 @@ export class AuthService {
                 user_id: data.user?.id,
             })
             .select('*')
-            .single();
-
         return data;
     }
 
