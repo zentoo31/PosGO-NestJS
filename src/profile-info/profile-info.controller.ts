@@ -1,8 +1,10 @@
-import { Controller, Get, Post, UsePipes, ValidationPipe, Body, Param, HttpException, HttpStatus  } from '@nestjs/common';
+import { Controller, Get, Post, UsePipes, ValidationPipe, Body, Param, HttpException, HttpStatus, UseGuards  } from '@nestjs/common';
 import { ProfileInfoService } from './profile-info.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('profile-info')
+@UseGuards(AuthGuard)
 export class ProfileInfoController {
     constructor(private readonly profileInfoService: ProfileInfoService) {}
 
