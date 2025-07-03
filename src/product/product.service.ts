@@ -30,14 +30,18 @@ export class ProductService {
         return { id: data.id, message: 'Product created successfully' };
     }
 
-    async getProducts(){
-        const {data, error} =  await this.supabase
-            .schema('public')
-            .from('product')
-            .select('*');
-        if (error) throw new Error(error.message);
-        return data;
-    }
+    async getProducts() {
+    const { data, error } = await this.supabase
+        .schema('public')
+        .from('product')
+        .select(`
+            *,
+            category:category (id, name, color)
+        `);
+    
+    if (error) throw new Error(error.message);
+    return data;
+}
 
     async getProductById(id: string) {
         const { data, error } = await this.supabase
