@@ -37,7 +37,8 @@ export class ProductService {
         .select(`
             *,
             category:category (id, name, color)
-        `);
+        `)
+        .limit(20);
     
     if (error) throw new Error(error.message);
     return data;
