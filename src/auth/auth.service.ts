@@ -43,7 +43,7 @@ export class AuthService {
     }
 
     async getSession() {
-        const { data, error } = await this.supabase.auth.getSession();
+        const { data, error } = await this.supabase.auth.getUser();
         if (error) {
             throw new Error(error.message);
         }
