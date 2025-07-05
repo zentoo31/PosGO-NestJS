@@ -18,6 +18,18 @@ export class ProductController {
         }
     }
 
+    @Get('search/:name')
+    async getProductsByName(@Param('name') name: string) {
+        try {
+            return await this.productService.getProductsByName(name);
+        } catch (error) {
+            throw new HttpException({
+                status: HttpStatus.NOT_FOUND,
+                error: `${error.message}`,
+            }, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @Post()
     @UsePipes(new ValidationPipe())
     async createProduct(@Body() product: CreateProductDto) {
