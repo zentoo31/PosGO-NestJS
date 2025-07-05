@@ -7,8 +7,8 @@ export class ProductService {
     constructor(
         @Inject('SUPABASE_CLIENT')
         private supabase: SupabaseClient
-    ){}
-    
+    ) { }
+
     async createProduct(product: CreateProductDto) {
         const existingCategory = await this.supabase
             .schema('public')
@@ -25,24 +25,36 @@ export class ProductService {
             .insert(product)
             .select('*')
             .single();
-        
+
         if (error) throw new Error(error.message);
         return { id: data.id, message: 'Product created successfully' };
     }
 
     async getProducts() {
-    const { data, error } = await this.supabase
-        .schema('public')
-        .from('product')
-        .select(`
+        const { data, error } = await this.supabase
+            .schema('public')
+            .from('product')
+            .select(`
             *,
             category:category (id, name, color)
         `)
-        .limit(20);
-    
-    if (error) throw new Error(error.message);
-    return data;
-}
+            .limit(20);
+
+        if (error) throw new Error(error.message);
+        return data;
+    }
+
+    async getProductsByName(name: string){
+        const { data, error } = await this.supabase
+            .schema('public')
+            .from('product')
+            .select('*')
+            .ilike('name', `%${name}%`)
+            .limit(20);
+
+        if (error) throw new Error(error.message);
+        return data;
+    }
 
     async getProductById(id: string) {
         const { data, error } = await this.supabase
@@ -63,7 +75,7 @@ export class ProductService {
             .eq('id', id)
             .select('*')
             .single();
-        
+
         if (error) throw new Error(error.message);
         return { id: data.id, message: 'Product updated successfully' };
     }
@@ -74,7 +86,7 @@ export class ProductService {
             .from('product')
             .delete()
             .eq('id', id);
-        
+
         if (error) throw new Error(error.message);
         return { message: 'Product deleted successfully' };
     }
