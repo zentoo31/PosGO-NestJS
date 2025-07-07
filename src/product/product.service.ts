@@ -44,12 +44,16 @@ export class ProductService {
         return data;
     }
 
-    async getProductsByName(name: string){
+    async getProductsByName(name: string) {
         const { data, error } = await this.supabase
             .schema('public')
             .from('product')
             .select('*')
             .ilike('name', `%${name}%`)
+            .select(`
+            *,
+            category:category (id, name, color)
+        `)
             .limit(20);
 
         if (error) throw new Error(error.message);
