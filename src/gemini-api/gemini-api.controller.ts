@@ -7,16 +7,14 @@ export class GeminiApiController {
     constructor(private readonly geminiApiService: GeminiApiService) { }
 
     @Post('generate-text')
-    async generateText(@Body('prompt') prompt: string, @Res() res: Response) {
-        res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-        res.setHeader('Transfer-Encoding', 'chunked');
-
+    async generateText(@Body('prompt') prompt: string): Promise<string> {
         const stream = await this.geminiApiService.generateTextStream(prompt);
+        let result = '';
 
         for await (const chunk of stream) {
-            res.write(chunk.text);
+            result += chunk.text;
         }
 
-        res.end();
+        return result;
     }
 }
