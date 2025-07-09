@@ -9,15 +9,17 @@ import { ProductService } from './product/product.service';
 import { ProductController } from './product/product.controller';
 import { ProductModule } from './product/product.module';
 import { CategoryModule } from './category/category.module';
+import { GeminiApiModule } from './gemini-api/gemini-api.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     SupabaseModule,
     ProfileInfoModule,
     ProductModule,
-    CategoryModule
+    CategoryModule,
+    GeminiApiModule
   ],
   controllers: [AppController, ProductController],
   providers: [AppService, ProductService],
